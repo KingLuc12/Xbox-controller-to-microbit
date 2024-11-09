@@ -31,7 +31,6 @@ def read_serial():
             print(cmd)
             print(rcv)
 
-# Create a separate thread to read from the serial port
 serial_thread = threading.Thread(target=read_serial, daemon=True)
 serial_thread.start()
 
@@ -40,7 +39,6 @@ if pygame.joystick.get_count() == 0:
     pygame.quit()
     sys.exit()
 
-# Get the first joystick
 joystick = pygame.joystick.Joystick(0)
 joystick.init()
 
@@ -57,12 +55,12 @@ while True:
             ser.write("OFF".encode())
             pygame.quit()
             sys.exit()
-        button_A = joystick.get_button(0)  # A button
-        button_B = joystick.get_button(1)  # B button
-        button_X = joystick.get_button(2)  # X button
-        button_Y = joystick.get_button(3)  # Y button
+        button_A = joystick.get_button(0)  
+        button_B = joystick.get_button(1)  
+        button_X = joystick.get_button(2)  
+        button_Y = joystick.get_button(3) 
 
-    # Log the button presses
+    
         if button_A:
             print("A button pressed")
         if button_X:
@@ -72,34 +70,31 @@ while True:
 
         keys = pygame.key.get_pressed()
         
-        if keys[pygame.K_w]:  # Check if the 'A' key is being held down
+        if keys[pygame.K_w]:
             print("The 'w' key is being held down")
             ser.write("w".encode())
 
-        if keys[pygame.K_a]:  # Check if the spacebar is being held down
+        if keys[pygame.K_a]:
             print("The 'a' key is being held down")
             ser.write("a".encode())
 
-        if keys[pygame.K_s]:  # Check if the spacebar is being held down
+        if keys[pygame.K_s]:
             print("The 's' key is being held down")
             ser.write("s".encode())
 
-        if keys[pygame.K_d]:  # Check if the spacebar is being held down
+        if keys[pygame.K_d]:
             print("The 'd' key is being held down")
             ser.write("d".encode())
-            hat = joystick.get_hat(0)  # Get the D-pad state (x, y)
+            hat = joystick.get_hat(0) 
     if button_B and not b_button_prev_state:
-        # Perform the action only once when B is pressed
+     
         print("B button pressed")
         ser.write("BB".encode())
-        time.sleep(5)  # Wait for 5 seconds after the press
-
-    # Update previous state of the B button
-    b_button_prev_state = button_B
+     
     hat = joystick.get_hat(0)
 
     if hat != (0, 0):
-        # Continuously print the D-pad direction as long as it's being held down
+        # Write specifc D-pad directions to SERIAL
         print(f"D-pad direction: {hat}")
         print(hat)
         if (hat == (0, 1)):
@@ -112,7 +107,6 @@ while True:
             ser.write('d'.encode())
 
     time.sleep(0.1)
-
-    # Optional: Add any other game logic, drawing, etc.
+ 
     pygame.display.update()
     
