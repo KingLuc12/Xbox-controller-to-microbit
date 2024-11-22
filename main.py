@@ -10,7 +10,7 @@ display = pygame.display.set_mode((300, 300))
 
 ser = serial.Serial()
 ser.baudrate = 115200
-ser.port = "COM5"
+ser.port = "COM24"
 
 connection = False
 
@@ -34,19 +34,6 @@ def read_serial():
 serial_thread = threading.Thread(target=read_serial, daemon=True)
 serial_thread.start()
 
-if pygame.joystick.get_count() == 0:
-    print("No joystick connected!")
-    pygame.quit()
-    sys.exit()
-
-joystick = pygame.joystick.Joystick(0)
-joystick.init()
-
-print(f"Joystick Name: {joystick.get_name()}")
-print(f"Number of Axes: {joystick.get_numaxes()}")
-print(f"Number of Buttons: {joystick.get_numbuttons()}")
-print(f"Number of Hats: {joystick.get_numhats()}")
-
 b_button_prev_state = False
 
 while True:
@@ -55,18 +42,6 @@ while True:
             ser.write("OFF".encode())
             pygame.quit()
             sys.exit()
-        button_A = joystick.get_button(0)  
-        button_B = joystick.get_button(1)  
-        button_X = joystick.get_button(2)  
-        button_Y = joystick.get_button(3) 
-
-    
-        if button_A:
-            print("A button pressed")
-        if button_X:
-            print("X button pressed")
-        if button_Y:
-            print("Y button pressed")
 
         keys = pygame.key.get_pressed()
         
@@ -85,26 +60,10 @@ while True:
         if keys[pygame.K_d]:
             print("The 'd' key is being held down")
             ser.write("d".encode())
-            hat = joystick.get_hat(0) 
-    if button_B and not b_button_prev_state:
+        if keys[pygame.K_p]:
      
-        print("B button pressed")
-        ser.write("BB".encode())
-     
-    hat = joystick.get_hat(0)
-
-    if hat != (0, 0):
-        # Write specifc D-pad directions to SERIAL
-        print(f"D-pad direction: {hat}")
-        print(hat)
-        if (hat == (0, 1)):
-            ser.write('w'.encode())
-        if (hat == (-1, 0)):
-            ser.write('a'.encode())
-        if (hat == (0, -1)):
-            ser.write('s'.encode())
-        if (hat == (1, 0)):
-            ser.write('d'.encode())
+            print("B button pressed")
+            ser.write("BB".encode())
 
     time.sleep(0.1)
  
